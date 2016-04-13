@@ -1,0 +1,71 @@
+#include <random>
+#include <iostream>
+#include <unittest++/UnitTest++.h>
+
+#include "StreetsDatabaseAPI.h"
+#include "m1.h"
+#include "m3.h"
+#include "m4.h"
+
+#include "unit_test_util.h"
+#include "courier_verify.h"
+
+using ece297test::relative_error;
+using ece297test::courier_path_is_legal;
+
+
+SUITE(extreme_toronto_public) {
+    TEST(extreme_toronto) {
+        std::vector<DeliveryInfo> deliveries;
+        std::vector<unsigned> depots;
+        std::vector<unsigned> result_path;
+        bool is_legal;
+        
+        deliveries = {DeliveryInfo(97737, 22123), DeliveryInfo(86706, 107106), DeliveryInfo(70446, 89550), DeliveryInfo(92035, 91504), DeliveryInfo(91406, 12979), DeliveryInfo(100483, 100489), DeliveryInfo(65227, 44951), DeliveryInfo(71300, 24499), DeliveryInfo(39569, 26541), DeliveryInfo(10943, 8868), DeliveryInfo(86202, 49245), DeliveryInfo(95476, 6933), DeliveryInfo(87487, 5098), DeliveryInfo(19200, 37655), DeliveryInfo(69586, 11855), DeliveryInfo(38195, 9266), DeliveryInfo(76897, 55076), DeliveryInfo(1577, 23420), DeliveryInfo(101760, 36138), DeliveryInfo(18992, 1358), DeliveryInfo(20737, 4199), DeliveryInfo(3825, 19895), DeliveryInfo(108313, 38772), DeliveryInfo(52866, 99918), DeliveryInfo(58367, 38278), DeliveryInfo(55815, 62594), DeliveryInfo(10903, 8852), DeliveryInfo(101687, 63100), DeliveryInfo(101653, 1995), DeliveryInfo(32635, 84959), DeliveryInfo(4532, 60665), DeliveryInfo(7451, 6732), DeliveryInfo(66721, 51546), DeliveryInfo(100800, 85757), DeliveryInfo(55413, 42396), DeliveryInfo(57606, 63772), DeliveryInfo(67512, 19810), DeliveryInfo(101289, 67660), DeliveryInfo(84756, 90646), DeliveryInfo(57800, 49935), DeliveryInfo(81126, 41379), DeliveryInfo(83885, 4922), DeliveryInfo(44236, 9832), DeliveryInfo(80177, 80066), DeliveryInfo(100835, 33285), DeliveryInfo(53191, 28183), DeliveryInfo(79300, 107511), DeliveryInfo(24536, 21543), DeliveryInfo(27124, 82725), DeliveryInfo(43658, 54195), DeliveryInfo(69278, 100017), DeliveryInfo(97039, 12154), DeliveryInfo(107250, 18010), DeliveryInfo(42285, 75488), DeliveryInfo(104906, 45561), DeliveryInfo(35117, 46371), DeliveryInfo(18176, 7464), DeliveryInfo(66985, 337), DeliveryInfo(78011, 84803), DeliveryInfo(39454, 9971), DeliveryInfo(38327, 100624), DeliveryInfo(30957, 95459), DeliveryInfo(86153, 59390), DeliveryInfo(99997, 52329), DeliveryInfo(78446, 43073), DeliveryInfo(108369, 30452), DeliveryInfo(82971, 15070), DeliveryInfo(86016, 66831), DeliveryInfo(16338, 69732), DeliveryInfo(24181, 7956), DeliveryInfo(53851, 38252), DeliveryInfo(70416, 82078), DeliveryInfo(38198, 73571), DeliveryInfo(51298, 47356), DeliveryInfo(97739, 59795), DeliveryInfo(10324, 81125), DeliveryInfo(78074, 35161), DeliveryInfo(43330, 3965), DeliveryInfo(63125, 37747), DeliveryInfo(102356, 43166), DeliveryInfo(80679, 81011), DeliveryInfo(15942, 108701), DeliveryInfo(13046, 70271), DeliveryInfo(101925, 43762), DeliveryInfo(45017, 85103), DeliveryInfo(98913, 97060), DeliveryInfo(72613, 74346), DeliveryInfo(4542, 16876), DeliveryInfo(54400, 97553), DeliveryInfo(42794, 30678), DeliveryInfo(35600, 7936), DeliveryInfo(47933, 17911), DeliveryInfo(89038, 90700), DeliveryInfo(37935, 48448), DeliveryInfo(92897, 50555), DeliveryInfo(9676, 20734), DeliveryInfo(66236, 98229), DeliveryInfo(55586, 96313), DeliveryInfo(25699, 102948), DeliveryInfo(79089, 72423), DeliveryInfo(12457, 71101), DeliveryInfo(106629, 19927), DeliveryInfo(105215, 28113), DeliveryInfo(104429, 90122), DeliveryInfo(12658, 6342), DeliveryInfo(104063, 104785), DeliveryInfo(102743, 79598), DeliveryInfo(31348, 95638), DeliveryInfo(5115, 77756), DeliveryInfo(88550, 85554), DeliveryInfo(16212, 39365), DeliveryInfo(39208, 40477), DeliveryInfo(76351, 78144), DeliveryInfo(60724, 107865), DeliveryInfo(105705, 39838), DeliveryInfo(13641, 75528), DeliveryInfo(35440, 788), DeliveryInfo(52343, 57495), DeliveryInfo(45478, 38816), DeliveryInfo(78964, 24686), DeliveryInfo(57079, 107516), DeliveryInfo(51767, 73285), DeliveryInfo(9206, 52303), DeliveryInfo(96723, 22897), DeliveryInfo(91238, 51539), DeliveryInfo(71680, 18540), DeliveryInfo(23303, 64794), DeliveryInfo(7898, 11483), DeliveryInfo(4974, 41556), DeliveryInfo(6728, 59088), DeliveryInfo(15029, 82548), DeliveryInfo(20835, 101981), DeliveryInfo(37879, 101434), DeliveryInfo(107705, 102304), DeliveryInfo(7921, 62502), DeliveryInfo(100594, 43313), DeliveryInfo(27311, 34325), DeliveryInfo(15012, 65199), DeliveryInfo(48195, 53593), DeliveryInfo(61188, 72699), DeliveryInfo(15383, 29521), DeliveryInfo(98849, 17404), DeliveryInfo(28358, 64354), DeliveryInfo(77817, 4401), DeliveryInfo(87533, 37041), DeliveryInfo(91044, 86037), DeliveryInfo(59888, 18522), DeliveryInfo(70166, 82462), DeliveryInfo(37234, 102756), DeliveryInfo(2089, 39725), DeliveryInfo(89895, 7133), DeliveryInfo(57694, 2500), DeliveryInfo(53439, 49695), DeliveryInfo(69104, 91785), DeliveryInfo(63733, 46490), DeliveryInfo(76725, 87583), DeliveryInfo(40604, 67188), DeliveryInfo(106684, 56115), DeliveryInfo(15289, 82773), DeliveryInfo(56889, 105054), DeliveryInfo(85751, 46224), DeliveryInfo(14766, 74171), DeliveryInfo(35435, 25214), DeliveryInfo(10241, 20733), DeliveryInfo(46379, 78497), DeliveryInfo(103884, 48768), DeliveryInfo(71193, 97900), DeliveryInfo(73387, 36400), DeliveryInfo(48908, 43693), DeliveryInfo(3417, 91647), DeliveryInfo(1670, 54596), DeliveryInfo(24222, 105503), DeliveryInfo(74710, 17038), DeliveryInfo(56057, 67471), DeliveryInfo(100567, 60848)};
+        depots = {24, 92566, 1472, 99728, 73976, 97636, 16302, 106692, 68479, 47367, 97481, 65740, 89515, 10414, 100062, 12750, 83423, 103509, 28534, 72513};
+        {
+        	ECE297_TIME_CONSTRAINT(30000);
+        	
+        	result_path = traveling_courier(deliveries, depots);
+        }
+        
+        is_legal = courier_path_is_legal(deliveries, depots, result_path);
+        CHECK(is_legal);
+        
+        if(is_legal) {
+        	double path_cost = compute_path_travel_time(result_path);
+        	std::cout << "QoR extreme_toronto: " << path_cost << std::endl;
+        } else {
+        	std::cout << "QoR extreme_toronto: INVALID" << std::endl;
+        }
+        
+    } //extreme_toronto
+
+    TEST(extreme_multi_toronto) {
+        std::vector<DeliveryInfo> deliveries;
+        std::vector<unsigned> depots;
+        std::vector<unsigned> result_path;
+        bool is_legal;
+        
+        deliveries = {DeliveryInfo(35616, 105526), DeliveryInfo(63629, 29982), DeliveryInfo(57895, 42832), DeliveryInfo(25504, 42414), DeliveryInfo(17388, 50521), DeliveryInfo(72263, 8484), DeliveryInfo(13114, 11870), DeliveryInfo(62797, 25487), DeliveryInfo(47665, 3132), DeliveryInfo(19446, 10643), DeliveryInfo(47665, 20216), DeliveryInfo(19919, 88504), DeliveryInfo(17884, 102336), DeliveryInfo(17320, 69630), DeliveryInfo(25504, 101648), DeliveryInfo(40957, 101012), DeliveryInfo(68878, 60332), DeliveryInfo(79874, 8198), DeliveryInfo(49579, 39492), DeliveryInfo(56988, 52677), DeliveryInfo(20388, 75461), DeliveryInfo(47665, 89283), DeliveryInfo(64901, 74546), DeliveryInfo(79278, 11982), DeliveryInfo(61080, 106565), DeliveryInfo(19919, 74718), DeliveryInfo(74498, 58420), DeliveryInfo(67830, 83936), DeliveryInfo(62797, 37040), DeliveryInfo(40338, 531), DeliveryInfo(69435, 52369), DeliveryInfo(50594, 43698), DeliveryInfo(53778, 72780), DeliveryInfo(72263, 106061), DeliveryInfo(40928, 74718), DeliveryInfo(48762, 77948), DeliveryInfo(2996, 66404), DeliveryInfo(85310, 72860), DeliveryInfo(28858, 32671), DeliveryInfo(5410, 34612), DeliveryInfo(61145, 20216), DeliveryInfo(62797, 1609), DeliveryInfo(76206, 66404), DeliveryInfo(87649, 11982), DeliveryInfo(68455, 29016), DeliveryInfo(89198, 52696), DeliveryInfo(11266, 54359), DeliveryInfo(68878, 34825), DeliveryInfo(19919, 101012), DeliveryInfo(17884, 60387), DeliveryInfo(107445, 104557), DeliveryInfo(72263, 37252), DeliveryInfo(31169, 9991), DeliveryInfo(94872, 60332), DeliveryInfo(16513, 11982), DeliveryInfo(67051, 17253), DeliveryInfo(6012, 51171), DeliveryInfo(9356, 18856), DeliveryInfo(66467, 88504), DeliveryInfo(34656, 76700), DeliveryInfo(81848, 101012), DeliveryInfo(68455, 89283), DeliveryInfo(15410, 77948), DeliveryInfo(99081, 1736), DeliveryInfo(80064, 46224), DeliveryInfo(19919, 39183), DeliveryInfo(44665, 8259), DeliveryInfo(40188, 20216), DeliveryInfo(12281, 14841), DeliveryInfo(10831, 61773), DeliveryInfo(30922, 89283), DeliveryInfo(39195, 45037), DeliveryInfo(74253, 81289), DeliveryInfo(31861, 32431), DeliveryInfo(43454, 46741), DeliveryInfo(105212, 25539), DeliveryInfo(29004, 31106), DeliveryInfo(67490, 97034), DeliveryInfo(41159, 7093), DeliveryInfo(68455, 45222), DeliveryInfo(48371, 32671), DeliveryInfo(62797, 108675), DeliveryInfo(17884, 14841), DeliveryInfo(68878, 8259), DeliveryInfo(96097, 18291), DeliveryInfo(17884, 17585), DeliveryInfo(19919, 44870), DeliveryInfo(74738, 50575), DeliveryInfo(68878, 72860), DeliveryInfo(68878, 37040), DeliveryInfo(90057, 77948), DeliveryInfo(19919, 101648), DeliveryInfo(2817, 102593), DeliveryInfo(44652, 21453), DeliveryInfo(68455, 60332), DeliveryInfo(19446, 53260), DeliveryInfo(19446, 30587), DeliveryInfo(36865, 46534), DeliveryInfo(28051, 32740), DeliveryInfo(56224, 36759), DeliveryInfo(101697, 96491), DeliveryInfo(82134, 34928), DeliveryInfo(102974, 36049), DeliveryInfo(14416, 60833), DeliveryInfo(62797, 54746), DeliveryInfo(63578, 88504), DeliveryInfo(107653, 20139), DeliveryInfo(106921, 40336), DeliveryInfo(61080, 28262), DeliveryInfo(53317, 10101), DeliveryInfo(64776, 52696), DeliveryInfo(87070, 32431), DeliveryInfo(47665, 89283), DeliveryInfo(41159, 19997), DeliveryInfo(106170, 16494), DeliveryInfo(9425, 66296), DeliveryInfo(85812, 101883), DeliveryInfo(87998, 84048), DeliveryInfo(74855, 102068), DeliveryInfo(74738, 77819), DeliveryInfo(59220, 101648), DeliveryInfo(41159, 32671), DeliveryInfo(93408, 17081), DeliveryInfo(32026, 2717), DeliveryInfo(104300, 25539), DeliveryInfo(84916, 67679), DeliveryInfo(102974, 66404), DeliveryInfo(108618, 32671), DeliveryInfo(49519, 11982), DeliveryInfo(17884, 77819), DeliveryInfo(78260, 16446), DeliveryInfo(19446, 65428), DeliveryInfo(72263, 57866), DeliveryInfo(61080, 34484), DeliveryInfo(8687, 101648), DeliveryInfo(68878, 20216), DeliveryInfo(45369, 5383), DeliveryInfo(108291, 82221), DeliveryInfo(55468, 101883), DeliveryInfo(72263, 74273), DeliveryInfo(25504, 91500), DeliveryInfo(19919, 90625), DeliveryInfo(25531, 51171), DeliveryInfo(17884, 36829), DeliveryInfo(102974, 43698), DeliveryInfo(8064, 66404), DeliveryInfo(62797, 14841), DeliveryInfo(47897, 54888), DeliveryInfo(70787, 66476), DeliveryInfo(47665, 102336), DeliveryInfo(33914, 36208), DeliveryInfo(25504, 107894), DeliveryInfo(25504, 51171), DeliveryInfo(68557, 13978), DeliveryInfo(37843, 47616), DeliveryInfo(25504, 1736), DeliveryInfo(25504, 91027), DeliveryInfo(91568, 53583), DeliveryInfo(93964, 22241), DeliveryInfo(41159, 68154), DeliveryInfo(62797, 2483), DeliveryInfo(102974, 85994), DeliveryInfo(74738, 60584), DeliveryInfo(68878, 94508), DeliveryInfo(40736, 21791), DeliveryInfo(103090, 1973), DeliveryInfo(98543, 56693), DeliveryInfo(31308, 78357), DeliveryInfo(102974, 17289), DeliveryInfo(21585, 90482), DeliveryInfo(19446, 68751), DeliveryInfo(61080, 1736), DeliveryInfo(12023, 37499), DeliveryInfo(62797, 32431), DeliveryInfo(85817, 83833), DeliveryInfo(59415, 88123), DeliveryInfo(8148, 37177), DeliveryInfo(47665, 72860), DeliveryInfo(67336, 51171), DeliveryInfo(72283, 47506), DeliveryInfo(98543, 20394), DeliveryInfo(67307, 38349), DeliveryInfo(27381, 74718), DeliveryInfo(19919, 95951), DeliveryInfo(47665, 31509), DeliveryInfo(89476, 88123), DeliveryInfo(25504, 37040), DeliveryInfo(74387, 83936), DeliveryInfo(25504, 77819), DeliveryInfo(62797, 66404), DeliveryInfo(76673, 101012), DeliveryInfo(80359, 10208), DeliveryInfo(10005, 47164), DeliveryInfo(47624, 44384), DeliveryInfo(3258, 3415), DeliveryInfo(74431, 65055), DeliveryInfo(19317, 9384), DeliveryInfo(68878, 72860), DeliveryInfo(98543, 52696), DeliveryInfo(4119, 104996), DeliveryInfo(19446, 39492), DeliveryInfo(17884, 83625), DeliveryInfo(106396, 11164), DeliveryInfo(66296, 14841), DeliveryInfo(41159, 4726), DeliveryInfo(47757, 92667), DeliveryInfo(82346, 17585), DeliveryInfo(47665, 1682), DeliveryInfo(35923, 50927), DeliveryInfo(63199, 39492), DeliveryInfo(68455, 9755), DeliveryInfo(19446, 32431), DeliveryInfo(47665, 39492), DeliveryInfo(74738, 27735), DeliveryInfo(17884, 85331), DeliveryInfo(25504, 371), DeliveryInfo(62815, 5625), DeliveryInfo(41159, 103159), DeliveryInfo(98543, 59607), DeliveryInfo(45203, 20635), DeliveryInfo(19919, 90625), DeliveryInfo(87430, 101648), DeliveryInfo(71840, 52822), DeliveryInfo(9359, 106726), DeliveryInfo(29173, 101012), DeliveryInfo(62797, 25539), DeliveryInfo(2645, 11982), DeliveryInfo(38071, 70415), DeliveryInfo(100547, 44702), DeliveryInfo(19919, 3836), DeliveryInfo(102974, 88123), DeliveryInfo(51900, 27246), DeliveryInfo(54572, 60332), DeliveryInfo(82173, 43698), DeliveryInfo(93570, 32483), DeliveryInfo(1481, 90408), DeliveryInfo(97848, 30320), DeliveryInfo(17884, 38073), DeliveryInfo(27128, 87235), DeliveryInfo(73809, 59236), DeliveryInfo(59426, 83936), DeliveryInfo(91268, 30588), DeliveryInfo(99646, 18080), DeliveryInfo(81830, 83081), DeliveryInfo(89386, 32671), DeliveryInfo(19446, 89283), DeliveryInfo(100125, 11936), DeliveryInfo(68455, 60332), DeliveryInfo(14033, 65819), DeliveryInfo(19446, 25539), DeliveryInfo(50041, 51171), DeliveryInfo(19446, 22007), DeliveryInfo(41159, 23921), DeliveryInfo(91960, 75394), DeliveryInfo(68878, 94944), DeliveryInfo(98543, 80724), DeliveryInfo(102974, 61733), DeliveryInfo(17884, 72860), DeliveryInfo(68878, 13449), DeliveryInfo(51016, 39231)};
+        depots = {26, 101823, 66935, 87928, 70488};
+        {
+        	ECE297_TIME_CONSTRAINT(30000);
+        	
+        	result_path = traveling_courier(deliveries, depots);
+        }
+        
+        is_legal = courier_path_is_legal(deliveries, depots, result_path);
+        CHECK(is_legal);
+        
+        if(is_legal) {
+        	double path_cost = compute_path_travel_time(result_path);
+        	std::cout << "QoR extreme_multi_toronto: " << path_cost << std::endl;
+        } else {
+        	std::cout << "QoR extreme_multi_toronto: INVALID" << std::endl;
+        }
+        
+    } //extreme_multi_toronto
+
+} //extreme_toronto_public
+
